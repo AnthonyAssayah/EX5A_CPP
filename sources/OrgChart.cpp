@@ -16,16 +16,15 @@ namespace ariel {
         OrgChart::Node::~Node(){};
 
 
-        OrgChart::Iterator OrgChart::Iterator::level_order(Node *root) {
+        void OrgChart::Iterator::level_order(Node *root) {
             
-            Iterator it;
-
             if (root==NULL) {
-                return it;
+                return;
             }
         
             queue<Node *> Q;  
             Q.push(root); 
+            tree_list.push_back(root);
             while (!Q.empty())
             {
                 int size = Q.size();
@@ -35,15 +34,14 @@ namespace ariel {
                     
                     Node * element = Q.front();
                     Q.pop();
-                    cout << element->data << " ";
         
                     for (size_t i=0; i<element->children.size(); i++) {
                         Q.push(element->children[i]);
+                        tree_list.push_back(element->children[i]);
                     }
                     size--;
                 }
             }
-            return it;
         }
 
         void OrgChart::Iterator::reverse_order(Node *root) {
@@ -52,31 +50,28 @@ namespace ariel {
                 return;
             }
 
-            stack <Node *> S;
-            queue <Node *> Q;
             Q.push(root);
-        
+
             while (!Q.empty())
             {
                 /* Dequeue node and make it root */
                 root = Q.front();
                 Q.pop();
-                S.push(root);
+                nodes.push(root);
                 
                 for (size_t i=0; i<root->children.size(); i++) {
                     if (root->children[root->children.size()-i-1] != nullptr) {
-                        Q.push(root->children[root->children.size()-i-1]);
+                       Q.push(root->children[root->children.size()-i-1]);
                     }
                 }
             }
         
             // Now pop all items from stack one by one and print them
-            while (!S.empty())
+            while (!nodes.empty() )
             {
-                root = S.top();
-                
-                cout << root->data << " ";
-                S.pop();
+                root = nodes.top();
+                tree_list.push_back(root);
+                nodes.pop();
             }
             
         }
@@ -85,9 +80,10 @@ namespace ariel {
         void OrgChart::Iterator::preorder(Node *root) {
             
 
-            stack<Node*> nodes;
         
             nodes.push(root);
+            tree_list.push_back(root);
+
         
             while (!nodes.empty()) {
         
@@ -98,22 +94,34 @@ namespace ariel {
                 // current node has been travarsed
             if(curr != NULL)
             {
-                cout << curr->data << " ";
         
                 // store all the childrent of current node from
-                vector<Node*>::iterator it = curr->children.end();
-        
-                while (it != curr->children.begin()) {
-                    it--;
-                    nodes.push(*it);
+                 for (size_t i=0; i<curr->children.size(); i++) {
+                    
+                    if ( curr->children.size()!= 0 ) {
+                       // nodes.push(curr->children[i]);
+                      //  tree_list.push_back(curr->children[i]);
+                        preorder(curr->children[i]);
+                    }
+                    
                 }
-            }
+                
+                // vector<Node*>::iterator it = curr->children.begin();
+        
+                // while (it != curr->children.end()) {
+                //     it++;
+                //   //  nodes.push(*it);
+                //     tree_list.push_back(*it);
+                }
+            
             }
             
         }
 
 
         OrgChart::Iterator::Iterator() {current_index=0;}
+
+        //OrgChart::Iterator::Iterator(Node* ptr = nullptr) : pointer_to_current_node(ptr) {}
 
         OrgChart::Iterator::Iterator(Node *root, int order = 0) : current_index(0) {
 
@@ -280,11 +288,11 @@ namespace ariel {
 
 
         OrgChart::Iterator OrgChart::begin() {
-            return Iterator{root};
+            return Iterator(root);
         }
 
         OrgChart::Iterator OrgChart::end() {
-            return Iterator{nullptr};
+            return Iterator(nullptr);
         }
 
         OrgChart::Iterator OrgChart::begin_preorder() { 
