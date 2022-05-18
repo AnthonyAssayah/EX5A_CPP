@@ -3,6 +3,7 @@
 #include <vector>
 #include <queue>
 #include <stack>
+#include <list>
 
 using namespace std;
 
@@ -10,13 +11,12 @@ namespace ariel {
 
     class OrgChart {
 
-        class Node {
+        struct Node {
 
             public:
                 /********* variables ***********/
                 vector<Node*> children;
                 string data;
-            
                 /********* Constructors **********/
                 Node();
                 Node(string _data, vector<Node*> _children);         
@@ -25,13 +25,23 @@ namespace ariel {
                 ~Node();
 
         };
+      //  Node *tree;
+        
+
+    public:
 
         class Iterator {
 
+        private:
+		    Node* pointer_to_current_node;
 
             /********* variables ***********/
             size_t current_index;
             vector<Node*> tree_list;
+            stack<Node*> nodes;
+            queue <Node *> Q;
+
+
 
             public:
 
@@ -40,7 +50,7 @@ namespace ariel {
                 Iterator(Node *root, int order);
 
                 /********* main functions **********/
-                Iterator level_order(Node *root);
+                void level_order(Node *root);
                 void preorder(Node *root);
                 void reverse_order(Node *root);
 
