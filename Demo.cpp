@@ -35,30 +35,22 @@ int main() {
   {
     cout << (*it) << " " ;
   } // prints: CEO CTO CFO COO VP_SW VP_BI
-
-  cout << endl;
-
   for (auto it = organization.begin_reverse_order(); it != organization.end_reverse_order(); ++it)
   {
     cout << (*it) << " " ;
   } // prints: VP_SW VP_BI CTO CFO COO CEO
+  for (auto it=organization.begin_preorder(); it!=organization.end_preorder(); ++it) {
+    cout << (*it) << " " ;
+  }  // prints: CEO CTO VP_SW CFO COO VP_BI
 
-  // cout << endl;
-
-  // for (auto it=organization.begin_preorder(); it!=organization.end_preorder(); ++it) {
-  //  cout << (*it) << " " ;
-  // }  // prints: CEO CTO VP_SW CFO COO VP_BI
-
-  //  for (string element : organization)
-  // { // this should work like level order
-  //   cout << element << " " ;
-  // } // prints: CEO CTO CFO COO VP_SW VP_BI
-
-  // cout << endl;
+  for (auto element : organization)
+  { // this should work like level order
+    cout << element << " " ;
+  } // prints: CEO CTO CFO COO VP_SW VP_BI
 
   // demonstrate the arrow operator:
-  // for (auto it = organization.begin_level_order(); it != organization.end_level_order(); ++it)
-  // {
-  //   cout << it->size() << " " ;
-  // } // prints: 3 3 3 3 5 5
+  for (auto it = organization.begin_level_order(); it != organization.end_level_order(); ++it)
+  {
+    cout << it->size() << " " ;
+  } // prints: 3 3 3 3 5 5
 }
